@@ -1,0 +1,7 @@
+parameters:
+#    pogo_redis_entity.example.class: Pogo\RedisEntityBundle\Example
+
+services:
+#    pogo_redis_entity.example:
+#        class: %pogo_redis_entity.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,3 @@
+PogoRedisEntityBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: PogoRedisEntityBundle:Default:index }
