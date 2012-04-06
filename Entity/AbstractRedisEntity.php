@@ -1,6 +1,6 @@
 <?php
 
-namespace Pogo\RedisEntityBundle\Entity; 
+namespace Pogotc\RedisEntityBundle\Entity; 
 
 abstract class AbstractRedisEntity {
 	

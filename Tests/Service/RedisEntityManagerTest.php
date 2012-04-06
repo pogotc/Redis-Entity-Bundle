@@ -1,10 +1,10 @@
 <?php
 
-namespace Pogo\RedisEntityBundle\Tests\Service;
+namespace Pogotc\RedisEntityBundle\Tests\Service;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Pogo\RedisEntityBundle\Service\RedisEntityManager;
-use Pogo\RedisEntityBundle\Tests\Entity\SampleEntity;
+use Pogotc\RedisEntityBundle\Service\RedisEntityManager;
+use Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity;
 use Snc\RedisBundle\Client\Phpredis\Client;
 
 
@@ -33,7 +33,7 @@ class RedisEntityManagerTest extends WebTestCase
 						->will($this->returnValue(1));
 						
 		$redisEntityManager = new RedisEntityManager($mockRedisService);
-		$sampleEntity = $redisEntityManager->create("Pogo\RedisEntityBundle\Tests\Entity\SampleEntity");
+		$sampleEntity = $redisEntityManager->create("Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity");
 		
 		$sampleEntity->title = "New Entity";
 		$sampleEntity->description = "New description";
@@ -58,8 +58,8 @@ class RedisEntityManagerTest extends WebTestCase
 						 );
 		
 		$redisEntityManager = new RedisEntityManager($mockRedisService);
-		$sampleEntity = $redisEntityManager->create("Pogo\RedisEntityBundle\Tests\Entity\SampleEntity");
-		$this->assertEquals(get_class($sampleEntity), "Pogo\RedisEntityBundle\Tests\Entity\SampleEntity");
+		$sampleEntity = $redisEntityManager->create("Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity");
+		$this->assertEquals(get_class($sampleEntity), "Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity");
 		
 		$sampleEntity->id = 1;
 		$sampleEntity->title = "Sample Entity";
@@ -104,8 +104,8 @@ class RedisEntityManagerTest extends WebTestCase
 							->will($this->returnValue($returnArray));
 							
 							
-		$sampleEntity = $redisEntityManager->loadById("Pogo\RedisEntityBundle\Tests\Entity\SampleEntity", 1);
-		$this->assertEquals(get_class($sampleEntity), "Pogo\RedisEntityBundle\Tests\Entity\SampleEntity");
+		$sampleEntity = $redisEntityManager->loadById("Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity", 1);
+		$this->assertEquals(get_class($sampleEntity), "Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity");
 		$this->assertEquals("Sample Entity", $sampleEntity->title);
 		$this->assertEquals("Test description", $sampleEntity->description);
 		

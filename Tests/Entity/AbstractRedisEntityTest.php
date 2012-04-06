@@ -1,10 +1,10 @@
 <?php
 
-namespace Pogo\RedisEntityBundle\Tests\Service;
+namespace Pogotc\RedisEntityBundle\Tests\Service;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Pogo\RedisEntityBundle\Service\RedisEntityManager;
-use Pogo\RedisEntityBundle\Tests\Entity\SampleEntity;
+use Pogotc\RedisEntityBundle\Service\RedisEntityManager;
+use Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity;
 use Snc\RedisBundle\Client\Phpredis\Client;
 
 

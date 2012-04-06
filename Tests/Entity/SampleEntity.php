@@ -1,8 +1,8 @@
 <?php
 
-namespace Pogo\RedisEntityBundle\Tests\Entity; 
+namespace Pogotc\RedisEntityBundle\Tests\Entity; 
 
-use Pogo\RedisEntityBundle\Entity\AbstractRedisEntity;
+use Pogotc\RedisEntityBundle\Entity\AbstractRedisEntity;
 
 class SampleEntity extends AbstractRedisEntity {
 	

@@ -1,6 +1,6 @@
 <?php
 
-namespace Pogo\RedisEntityBundle\Service; 
+namespace Pogotc\RedisEntityBundle\Service; 
                                   
 class RedisEntityManager {
 	

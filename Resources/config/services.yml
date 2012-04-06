@@ -1,5 +1,5 @@
 parameters:
-#    pogo_redis_entity.example.class: Pogo\RedisEntityBundle\Example
+#    pogo_redis_entity.example.class: Pogotc\RedisEntityBundle\Example
 
 services:
 #    pogo_redis_entity.example:
