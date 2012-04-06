@@ -31,8 +31,12 @@ class RedisEntityManagerTest extends WebTestCase
 						->method("incr")
 						->with("global:nextsampleentityid")
 						->will($this->returnValue(1));
-						
-		$redisEntityManager = new RedisEntityManager($mockRedisService);
+		
+		$mockAnnotationReader = $this->getMockBuilder("\Doctrine\Common\Annotations\FileCacheReader")
+									->disableOriginalConstructor()
+									->getMock();
+		
+		$redisEntityManager = new RedisEntityManager($mockRedisService, $mockAnnotationReader);
 		$sampleEntity = $redisEntityManager->create("Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity");
 		
 		$sampleEntity->title = "New Entity";
@@ -57,7 +61,11 @@ class RedisEntityManagerTest extends WebTestCase
 				             )
 						 );
 		
-		$redisEntityManager = new RedisEntityManager($mockRedisService);
+		$mockAnnotationReader = $this->getMockBuilder("\Doctrine\Common\Annotations\FileCacheReader")
+									->disableOriginalConstructor()
+									->getMock();
+
+		$redisEntityManager = new RedisEntityManager($mockRedisService, $mockAnnotationReader);
 		$sampleEntity = $redisEntityManager->create("Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity");
 		$this->assertEquals(get_class($sampleEntity), "Pogotc\RedisEntityBundle\Tests\Entity\SampleEntity");
 		
@@ -70,17 +78,52 @@ class RedisEntityManagerTest extends WebTestCase
 	public function testCreateInvalidClass(){
 		try{
 			$mockRedisService = $this->getMock("Client", array("set", "multi", "exec"));      
-			$redisEntityManager = new RedisEntityManager($mockRedisService);
+			$mockAnnotationReader = $this->getMockBuilder("\Doctrine\Common\Annotations\FileCacheReader")
+										->disableOriginalConstructor()
+										->getMock();
+
+			$redisEntityManager = new RedisEntityManager($mockRedisService, $mockAnnotationReader);
 			$sampleEntity = $redisEntityManager->create("Fake\Entity");                   
 			$this->fail();
 		}catch(\Exception $e){
 			$this->assertEquals($e->getMessage(), "Class Fake\Entity could not be found");
 		}
+	}  
+	
+	public function mockProperty($reflectionProperty){ 
+		switch($reflectionProperty->name){
+			case "title":
+				$response = "Sample Entity";
+				break;
+			case "description":
+				$response = "Test description";
+				break;
+		    case "id":
+				$response = 1;
+				break;
+		}
+		$mockAnnotationReader = $this->getMockBuilder("Pogotc\RedisEntityBundle\Annotations\RedisEntityString")
+									->disableOriginalConstructor()
+									->getMock();
+		$mockAnnotationReader->expects($this->any())
+							 ->method("prepareOutput")
+							 ->will($this->returnValue($response));
+		return array(
+			$mockAnnotationReader
+		);
 	}
 
 	public function testLoad(){                                            
 		$mockRedisService = $this->getMock("Client", array("get", "multi", "exec"));      
-		$redisEntityManager = new RedisEntityManager($mockRedisService);
+		$mockAnnotationReader = $this->getMockBuilder("\Doctrine\Common\Annotations\FileCacheReader")
+									->disableOriginalConstructor()
+									->getMock();
+		 
+		$mockAnnotationReader->expects($this->any())
+							   	->method("getPropertyAnnotations")
+								->will($this->returnCallback(array($this, "mockProperty")));
+		
+		$redisEntityManager = new RedisEntityManager($mockRedisService, $mockAnnotationReader);
 		$map = array(
 			array('sampleentity:1:title', 'Sample Entity'),
 			array('sampleentity:1:description', 'Test description'),
@@ -110,5 +153,8 @@ class RedisEntityManagerTest extends WebTestCase
 		$this->assertEquals("Test description", $sampleEntity->description);
 		
 	}
-
+         
+	public function testSaveArray(){
+		
+	}
 }

@@ -1,13 +1,17 @@
 <?php
 
 namespace Pogotc\RedisEntityBundle\Service; 
+
+use Doctrine\Common\Annotations\Reader;
                                   
 class RedisEntityManager {
 	
-	private $redisService;
+	private $redisService;                                      
+	private $annotationReader;
 	
-	public function __construct($redisService){
+	public function __construct($redisService, $annotationReader){
 		$this->redisService = $redisService;
+		$this->annotationReader = $annotationReader;
 	}
 	
 	
@@ -19,7 +23,7 @@ class RedisEntityManager {
 		}
 	} 
 	
-	public function save($object){   
+	public function save($object){   		
 		$id = $object->id;
 		if(!$id){
 			$id = $this->getNextIdForObject($object);
@@ -33,7 +37,12 @@ class RedisEntityManager {
 			}     
 			
 			$redisKey = $className.":".$id.":".$key;
-			$this->redisService->set($redisKey, $val);
+			
+			$propAnnot = $this->annotationReader
+							->getPropertyAnnotations(new \ReflectionProperty(get_class($object), $key));
+			if($propAnnot){
+				$this->redisService->set($redisKey, $propAnnot[0]->prepareInput($val));
+			}
 		} 
 		$this->redisService->exec();
 	}
@@ -61,9 +70,15 @@ class RedisEntityManager {
 		//And then put them back into the object
 		if(count($fieldKeyMap)){
 			foreach($fieldKeyMap as $fieldName => $resultIdx){
-				$object->$fieldName = $result[$resultIdx];
+				$propAnnot = $this->annotationReader
+								->getPropertyAnnotations(new \ReflectionProperty($class, $fieldName));
+				if($propAnnot){
+					$object->$fieldName = $propAnnot[0]->prepareOutput($result[$resultIdx]);
+				}
+				
 			}
-		}
+		}     
+		
 		return $object;
 	}
 }

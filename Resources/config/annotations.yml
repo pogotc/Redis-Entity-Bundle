@@ -1,0 +1,11 @@
+parameters:
+    pogotcredisentitybundle.controller.listener.class:                  
+        Pogotc\RedisEntityBundle\EventListener\ControllerListener
+
+services:
+    pogotcredisentitybundle.controller.listener:
+        class: %pogotcredisentitybundle.controller.listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+        arguments: [@annotation_reader]
+            
